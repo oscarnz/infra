@@ -116,6 +116,19 @@ resource "aws_eks_node_group" "deployment" {
   ]
 }
 
+data "aws_eks_cluster_auth" "deployment-3" {
+  name = aws_eks_cluster.deployment.name
+}
+
+provider "helm" {
+  debug = true
+  kubernetes {
+    host                   = aws_eks_cluster.deployment.endpoint
+    cluster_ca_certificate = base64decode(aws_eks_cluster.deployment.certificate_authority.0.data)
+    token                  = data.aws_eks_cluster_auth.deployment-3.token
+   }
+}
+
 data "tls_certificate" "deployment" {
   url = aws_eks_cluster.deployment.identity[0].oidc[0].issuer
 }
