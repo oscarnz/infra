@@ -14,8 +14,14 @@ variable "region" {
   default     = "us-east-1"
 }
 
-variable "subnet_id" {
-  description = "subnet id"
+variable "subnet_id_1" {
+  description = "subnet id 1"
   type        = string
   default     = "subnet-05568fc56f5f0f344"
+}
+
+variable "subnet_id_2" {
+  description = "subnet id 2"
+  type        = string
+  default     = "subnet-079fb83f0872fcdfa"
 }

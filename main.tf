@@ -63,7 +63,11 @@ resource "aws_iam_role_policy_attachment" "example-AmazonEC2ContainerRegistryRea
 }
 
 data "aws_subnet" "default_az1" {
-  id = var.subnet_id
+  id = var.subnet_id_1
+}
+
+data "aws_subnet" "default_az2" {
+  id = var.subnet_id_2
 }
 
 resource "aws_eks_cluster" "deployment" {
@@ -73,6 +77,7 @@ resource "aws_eks_cluster" "deployment" {
   vpc_config {
     subnet_ids = [
       data.aws_subnet.default_az1.id,
+      data.aws_subnet.default_az2.id,
     ]
   }
 
@@ -88,7 +93,7 @@ resource "aws_eks_node_group" "deployment" {
   cluster_name    = aws_eks_cluster.deployment.name
   node_group_name = "deployment"
   node_role_arn   = aws_iam_role.example.arn
-  subnet_ids      = [data.aws_subnet.default_az1.id]
+  subnet_ids      = [data.aws_subnet.default_az1.id, data.aws_subnet.default_az2.id]
 
   scaling_config {
     desired_size = 1
