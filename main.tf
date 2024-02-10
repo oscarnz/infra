@@ -84,9 +84,9 @@ resource "aws_eks_cluster" "deployment" {
 }
 
 
-resource "aws_eks_node_group" "example" {
+resource "aws_eks_node_group" "deployment" {
   cluster_name    = aws_eks_cluster.deployment.name
-  node_group_name = "example"
+  node_group_name = "deployment"
   node_role_arn   = aws_iam_role.example.arn
   subnet_ids      = [data.aws_subnet.default_az1.id]
 
