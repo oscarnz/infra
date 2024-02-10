@@ -11,7 +11,7 @@ resource "helm_release" "ingress-nginx" {
     version    = "4.9.0"
     namespace  = kubernetes_namespace.ingress-nginx.id
 
-    values = [
-        "${file("helm-nginx/values.yaml")}"
-    ]
+    values = [templatefile("nginx-helm/values.yaml", {
+       
+    })]
 }
