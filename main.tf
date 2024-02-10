@@ -30,7 +30,7 @@ data "aws_iam_policy_document" "assume_role" {
 
     principals {
       type        = "Service"
-      identifiers = ["eks.amazonaws.com"]
+      identifiers = ["eks.amazonaws.com", "ec2.amazonaws.com"]
     }
 
     actions = ["sts:AssumeRole"]
