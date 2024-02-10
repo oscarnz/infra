@@ -115,3 +115,15 @@ resource "aws_eks_node_group" "deployment" {
     aws_iam_role_policy_attachment.example-AmazonEC2ContainerRegistryReadOnly,
   ]
 }
+
+data "tls_certificate" "deployment" {
+  url = aws_eks_cluster.deployment.identity[0].oidc[0].issuer
+}
+
+resource "aws_iam_openid_connect_provider" "deployment" {
+  client_id_list = ["sts.amazonaws.com"]
+  # https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc_verify-thumbprint.html
+  # https://github.com/terraform-providers/terraform-provider-tls/issues/52
+  thumbprint_list = [data.tls_certificate.deployment.certificates[0].sha1_fingerprint]
+  url             = aws_eks_cluster.deployment.identity.0.oidc.0.issuer
+}

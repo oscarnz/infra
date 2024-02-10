@@ -1,26 +1,17 @@
-# resource "helm_release" "ingress-nginx" {
-#   name       = "my-redis-release"
-#   repository = "https://charts.bitnami.com/bitnami"
-#   chart      = "redis"
-#   version    = "6.0.1"
+resource "kubernetes_namespace" "ingress-nginx" {
+  metadata {
+    name = "ingress-nginx"
+  }
+}
 
-#   values = [
-#     "${file("values.yaml")}"
-#   ]
+resource "helm_release" "ingress-nginx" {
+    name       = "ingress-nginx"
+    chart      = "ingress-nginx"
+    repository = "https://kubernetes.github.io/ingress-nginx"
+    version    = "4.9.0"
+    namespace  = kubernetes_namespace.ingress-nginx.id
 
-#   set {
-#     name  = "cluster.enabled"
-#     value = "true"
-#   }
-
-#   set {
-#     name  = "metrics.enabled"
-#     value = "true"
-#   }
-
-#   set {
-#     name  = "service.annotations.prometheus\\.io/port"
-#     value = "9127"
-#     type  = "string"
-#   }
-# }
+    values = [
+        "${file("helm-nginx/values.yaml")}"
+    ]
+}
