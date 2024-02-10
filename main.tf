@@ -120,6 +120,15 @@ data "aws_eks_cluster_auth" "deployment" {
   name = aws_eks_cluster.deployment.name
 }
 
+# Use helm provider
+provider "kubernetes" {
+  # experiments {
+  #   manifest_resource = true
+  # }
+  host                   = aws_eks_cluster.deployment.endpoint
+  cluster_ca_certificate = base64decode(aws_eks_cluster.deployment.certificate_authority.0.data)
+  token                  = data.aws_eks_cluster_auth.deployment.token
+}
 provider "helm" {
   debug = true
   kubernetes {
