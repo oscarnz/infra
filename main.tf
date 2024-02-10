@@ -116,7 +116,7 @@ resource "aws_eks_node_group" "deployment" {
   ]
 }
 
-data "aws_eks_cluster_auth" "deployment-3" {
+data "aws_eks_cluster_auth" "deployment" {
   name = aws_eks_cluster.deployment.name
 }
 
@@ -125,7 +125,7 @@ provider "helm" {
   kubernetes {
     host                   = aws_eks_cluster.deployment.endpoint
     cluster_ca_certificate = base64decode(aws_eks_cluster.deployment.certificate_authority.0.data)
-    token                  = data.aws_eks_cluster_auth.deployment.token
+    token                  = aws_eks_cluster_auth.deployment.token
    }
 }
 
