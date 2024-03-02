@@ -70,19 +70,14 @@ data "aws_subnet" "default_az2" {
   id = var.subnet_id_2
 }
 
-data "aws_subnet" "default_az3" {
-  id = var.subnet_id_3
-}
-
 resource "aws_eks_cluster" "deployment" {
-  name     = "deployment"
+  name     = "deployment-1"
   role_arn = aws_iam_role.example.arn
 
   vpc_config {
     subnet_ids = [
       data.aws_subnet.default_az1.id,
       data.aws_subnet.default_az2.id,
-      data.aws_subnet.default_az3.id,
     ]
   }
 
@@ -93,9 +88,10 @@ resource "aws_eks_cluster" "deployment" {
   ]
 }
 
+
 resource "aws_eks_node_group" "deployment" {
   cluster_name    = aws_eks_cluster.deployment.name
-  node_group_name = "node-1"
+  node_group_name = "deployment"
   node_role_arn   = aws_iam_role.example.arn
   subnet_ids      = [data.aws_subnet.default_az1.id, data.aws_subnet.default_az2.id]
 

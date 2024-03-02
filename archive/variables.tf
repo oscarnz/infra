@@ -11,7 +11,7 @@ variable "secret_key" {
 variable "region" {
   description = "AWS Region"
   type        = string
-  default     = "us-west-2"
+  default     = "us-east-1"
 }
 
 variable "subnet_id_1" {
@@ -24,10 +24,4 @@ variable "subnet_id_2" {
   description = "subnet id 2"
   type        = string
   default     = "subnet-079fb83f0872fcdfa"
-}
-
-variable "subnet_id_3" {
-  description = "subnet id 3"
-  type        = string
-  default     = "subnet-032a7b85360447ba8"
 }
