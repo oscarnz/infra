@@ -106,6 +106,7 @@ resource "aws_eks_node_group" "deployment" {
   }
 
   instance_types = ["t3a.medium"]
+  capacity_type = "SPOT"
 
   update_config {
     max_unavailable = 1
