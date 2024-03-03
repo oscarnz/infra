@@ -121,7 +121,12 @@ resource "aws_eks_node_group" "deployment" {
   ]
 }
 
-resource "aws_acm_certificate" "acm_validate" {
-  domain_name       = ["ariff-deployment.peacehotel.my", "*.ariff-deployment.peacehotel.my"]
+resource "aws_acm_certificate" "validate" {
+  domain_name       = "ariff-deployment.peacehotel.my"
+  validation_method = "DNS"
+}
+
+resource "aws_acm_certificate" "validate_wildcard" {
+  domain_name       = "*.ariff-deployment.peacehotel.my"
   validation_method = "DNS"
 }
