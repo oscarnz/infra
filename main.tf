@@ -130,3 +130,30 @@ resource "aws_acm_certificate" "validate_wildcard" {
   domain_name       = "*.ariff-deployment.peacehotel.my"
   validation_method = "DNS"
 }
+
+resource "aws_iam_openid_connect_provider" "this" {
+  client_id_list = ["sts.amazonaws.com"]
+  # https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc_verify-thumbprint.html
+  # https://github.com/terraform-providers/terraform-provider-tls/issues/52
+  thumbprint_list = [data.tls_certificate.cluster.certificates[0].sha1_fingerprint]
+  url             = aws_eks_cluster.deployment.identity.0.oidc.0.issuer
+}
+
+
+resource "aws_iam_role" "ebs_cni" {
+  name               = "AmazonEKS_EBS_CSI_DriverRole_Data-us-2"
+  assume_role_policy = data.aws_iam_policy_document.ebs_cni_controller.json
+
+  # tags = module.main.common_tags
+}
+
+resource "aws_iam_role_policy_attachment" "ebs_cni_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+  role       = aws_iam_role.ebs_cni.name
+}
+
+resource "aws_eks_addon" "csi_driver" {
+  cluster_name             = aws_eks_cluster.deployment.name
+  addon_name               = "aws-ebs-csi-driver"
+  service_account_role_arn = aws_iam_role.ebs_cni.arn
+}
