@@ -120,3 +120,8 @@ resource "aws_eks_node_group" "deployment" {
     aws_iam_role_policy_attachment.example-AmazonEC2ContainerRegistryReadOnly,
   ]
 }
+
+resource "aws_acm_certificate" "acm_validate" {
+  domain_name       = ["ariff-deployment.peacehotel.my", "*.ariff-deployment.peacehotel.my"]
+  validation_method = "DNS"
+}
